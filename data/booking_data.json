@@ -1,0 +1,28 @@
+{
+    "create_payload": {
+        "firstname": "Ywh",
+        "lastname": "Coder",
+        "totalprice": 200,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2025-01-01",
+            "checkout": "2025-01-05"
+        },
+        "additionalneeds": "Breakfast"
+    },
+    "update_payload": {
+        "firstname": "Updated",
+        "lastname": "Name",
+        "totalprice": 300,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2025-03-01",
+            "checkout": "2025-03-05"
+        },
+        "additionalneeds": "Dinner"
+    },
+    "login_creds": {
+        "username": "admin",
+        "password": "password123"
+    }
+}
