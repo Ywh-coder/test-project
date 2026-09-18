@@ -11,13 +11,19 @@ class TestBooking:
         assert len(resp.json()) > 0
 
     @pytest.mark.smoke
-    @pytest.mark.parametrize("variant", load_data()["create_payload_variants"])
-    def test_create_booking(self, client, variant):
+    @pytest.mark.parametrize(
+        "variant",
+        load_data()["create_payload_variants"],
+        ids=[v["name"] for v in load_data()["create_payload_variants"]],
+    )
+    def test_create_booking(self, client, variant, booking_cleaner):
         resp = client.post("/booking", json=variant["payload"])
         assert resp.status_code == 200
         data = resp.json()
         assert "bookingid" in data
         assert data["booking"]["firstname"] == variant["payload"]["firstname"]
+        # 登记清理
+        booking_cleaner.append(data["bookingid"])
 
     @pytest.mark.regression
     def test_get_booking_detail(self, client, create_booking):
@@ -32,7 +38,7 @@ class TestBooking:
         headers = {"Cookie": f"token={auth_token}"}
         resp = client.put(f"/booking/{create_booking}", json=payload, headers=headers)
         assert resp.status_code == 200
-        assert resp.json()["firstname"] == "Updated"
+        assert resp.json()["firstname"] == payload["firstname"]
 
     @pytest.mark.regression
     def test_delete_booking(self, client, create_booking, auth_token):

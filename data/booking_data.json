@@ -1,4 +1,6 @@
+
 {
+
     "create_payload": {
         "firstname": "Ywh",
         "lastname": "Coder",
@@ -25,6 +27,29 @@
         "username": "admin",
         "password": "password123"
     },
+    "login_invalid_cases": [
+        {
+            "name": "wrong_password",
+            "username": "admin",
+            "password": "wrong",
+            "expected_reason": "Bad credentials"
+        },
+        {
+            "name": "empty_username",
+            "username": "",
+            "password": "password123"
+        },
+        {
+            "name": "empty_password",
+            "username": "admin",
+            "password": ""
+        },
+        {
+            "name": "all_empty",
+            "username": "",
+            "password": ""
+        }
+    ],
     "create_payload_variants": [
         {
             "name": "valid_standard",
@@ -51,15 +76,17 @@
     ],
     "invalid_payloads": [
         {
-            "name": "missing_firstname",
-            "payload": {
-                "lastname": "NoFirstName",
-                "totalprice": 100,
-                "depositpaid": false,
-                "bookingdates": {"checkin": "2025-05-01", "checkout": "2025-05-03"}
-            },
-            "expected_status": 500
-        },
+    "name": "missing_firstname",
+    "payload": {
+        "lastname": "NoFirstName",
+        "totalprice": 100,
+        "depositpaid": false,
+        "bookingdates": {"checkin": "2025-05-01", "checkout": "2025-05-03"}
+    },
+    "expected_status": 400,
+    "xfail": true,
+    "reason": "服务端未做字段校验，当前返回 500，期望 400，标记为 xfail"
+},
         {
             "name": "negative_totalprice",
             "payload": {

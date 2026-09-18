@@ -9,10 +9,11 @@
 - requests
 - pytest-html（生成 HTML 测试报告）
 - allure-pytest（生成 Allure 测试报告）
+- > 需要先安装 Allure 命令行工具：https://docs.qameta.io/allure/#_installing_a_commandline
 
 ## 目录结构
 
-`	ext
+```text
 api-test-project/
 ├── common/              # 公共方法
 │   ├── __init__.py
@@ -31,56 +32,57 @@ api-test-project/
 ├── pytest.ini           # pytest 配置
 ├── requirements.txt
 └── README.md
-`
+```
 
 ## 安装依赖
 
-`ash
+```bash
 pip install -r requirements.txt
-`
+```
 
 ## 运行测试
 
 ### 基础运行
 
-`ash
+```bash
 pytest
-`
+```
 
 ### 带 HTML 报告
 
-`ash
+```bash
 pytest --html=report/report.html --self-contained-html
-`
+```
 
-运行完成后用浏览器打开 eport/report.html 查看报告。
+运行完成后用浏览器打开 
+report/report.html 查看报告。
 
 ### 生成 Allure 报告（进阶）
 
-`ash
+```bash
 pytest --alluredir=report/allure-results
 allure serve report/allure-results
-`
+```
 
 ### 按标记运行
 
-`ash
+```bash
 # 只跑冒烟测试
 pytest -m smoke
 
 # 只跑回归测试
 pytest -m regression
-`
+```
 
 ## 测试结果
 
-当前 **17 个用例全部通过**，覆盖认证 + 预订 CRUD + 异常场景：
+当前 **17 个用例16个通过,还有1 xfailed**，覆盖认证 + 预订 CRUD + 异常场景：
 
 | 模块 | 用例数 | 说明 |
-|------|--------|------|
-| Auth | 5 | 正常登录 / 错误密码 / 空参数（3 组） |
-| Booking（正常） | 8 | 查询列表 / 创建（2 组参数化） / 详情 / 更新 / 删除 / 404 |
-| Booking（异常） | 4 | 缺字段 / 负数价格 / 字符串价格 / 无 token 更新 / 删除不存在的预订 |
+|------|-----|------|
+| Auth | 5   | 正常登录 / 错误密码 / 空参数（3 组） |
+| Booking（正常） | 7   | 查询列表 / 创建（2 组参数化） / 详情 / 更新 / 删除 / 404 |
+| Booking（异常） | 5   | 缺字段 / 负数价格 / 字符串价格 / 无 token 更新 / 删除不存在的预订 |
 
 ## 测试用例覆盖
 
@@ -107,7 +109,7 @@ pytest -m regression
 
 | 用例 | 说明 | 标记 |
 |------|------|------|
-| test_create_booking_invalid_fields (3组) | 缺字段→500 / 负数价格→200 / 字符串价格→200（API 行为记录） | regression |
+| test_create_booking_invalid_fields (3组) | 缺字段→期望400(实际500, xfail) / 负数价格→200 / 字符串价格→200 | regression |
 | test_update_without_auth_token | 不带 token 更新，期望 403 | regression |
 | test_delete_nonexistent_booking | 删除不存在预订，期望 405 | regression |
 
