@@ -4,3 +4,8 @@ __pycache__/
 report/
 allure-results/
 venv/
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/

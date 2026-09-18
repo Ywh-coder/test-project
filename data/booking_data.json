@@ -24,5 +24,67 @@
     "login_creds": {
         "username": "admin",
         "password": "password123"
-    }
+    },
+    "create_payload_variants": [
+        {
+            "name": "valid_standard",
+            "payload": {
+                "firstname": "Test",
+                "lastname": "User",
+                "totalprice": 150,
+                "depositpaid": false,
+                "bookingdates": {"checkin": "2025-02-01", "checkout": "2025-02-03"},
+                "additionalneeds": "Lunch"
+            }
+        },
+        {
+            "name": "valid_with_deposit",
+            "payload": {
+                "firstname": "Deposit",
+                "lastname": "Paid",
+                "totalprice": 500,
+                "depositpaid": true,
+                "bookingdates": {"checkin": "2025-04-01", "checkout": "2025-04-10"},
+                "additionalneeds": "SPA"
+            }
+        }
+    ],
+    "invalid_payloads": [
+        {
+            "name": "missing_firstname",
+            "payload": {
+                "lastname": "NoFirstName",
+                "totalprice": 100,
+                "depositpaid": false,
+                "bookingdates": {"checkin": "2025-05-01", "checkout": "2025-05-03"}
+            },
+            "expected_status": 500
+        },
+        {
+            "name": "negative_totalprice",
+            "payload": {
+                "firstname": "Negative",
+                "lastname": "Price",
+                "totalprice": -50,
+                "depositpaid": false,
+                "bookingdates": {"checkin": "2025-06-01", "checkout": "2025-06-03"},
+                "additionalneeds": ""
+            },
+            "expected_status": 200,
+            "note": "API 接受负数价格，仅验证字段存在性"
+        },
+        {
+            "name": "string_totalprice",
+            "payload": {
+                "firstname": "String",
+                "lastname": "Price",
+                "totalprice": "abc",
+                "depositpaid": false,
+                "bookingdates": {"checkin": "2025-07-01", "checkout": "2025-07-03"},
+                "additionalneeds": ""
+            },
+            "expected_status": 200,
+            "note": "API 将字符串价格转为 null 并接受"
+        }
+    ]
 }

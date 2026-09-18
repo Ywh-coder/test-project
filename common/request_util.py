@@ -11,9 +11,10 @@ class RequestUtil:
 
     def request(self, method, path, **kwargs):
         url = self.base_url + path
-        logger.info(f"请求: {method} {url}, 参数: {kwargs}")
+        logger.info(f"请求: {method} {url}, 参数: {str(kwargs)[:300]}")
         resp = self.session.request(method, url, **kwargs)
-        logger.info(f"响应: {resp.status_code}, {resp.text[:200]}")
+        body = resp.text[:300] if resp.text else ""
+        logger.info(f"响应: {resp.status_code}, body: {body}")
         return resp
 
     def get(self, path, **kwargs):
