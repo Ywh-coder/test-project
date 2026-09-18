@@ -23,7 +23,8 @@ class TestBooking:
     def test_get_booking_detail(self, client, create_booking):
         resp = client.get(f"/booking/{create_booking}")
         assert resp.status_code == 200
-        assert resp.json()["firstname"] == "Ywh"
+        expected = load_data()["create_payload"]["firstname"]
+        assert resp.json()["firstname"] == expected
 
     @pytest.mark.regression
     def test_update_booking(self, client, create_booking, auth_token):

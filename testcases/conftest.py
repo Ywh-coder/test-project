@@ -1,7 +1,9 @@
 import pytest
 from common.data_loader import load_data
+from common.logger import get_logger
 from common.request_util import RequestUtil
 
+logger = get_logger(__name__)
 BASE_URL = "https://restful-booker.herokuapp.com"
 
 
@@ -25,8 +27,10 @@ def create_booking(client, auth_token):
     assert resp.status_code == 200
     booking_id = resp.json()["bookingid"]
     yield booking_id
-    # 测试结束后清理数据
-    client.delete(
+    # teardown：用例可能已经删除了该 booking，405/404 视为已清理
+    resp = client.delete(
         f"/booking/{booking_id}",
         headers={"Cookie": f"token={auth_token}"}
     )
+    if resp.status_code not in (201, 404, 405):
+        logger.warning(f"清理 booking {booking_id} 异常: {resp.status_code}")
